@@ -1,0 +1,132 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Shop-Stop
+  // Bootstrap CSS
+  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+  script(src='/app.js')
+form(action='/save' method='post')
+  // Navigation Bar
+  nav.navbar.navbar-expand-lg.navbar-light.bg-light
+    a.navbar-brand(href='#' style='color: red;')
+      | Shop
+      span(style='color: green;') Stop
+    button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false' aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarNav.collapse.navbar-collapse
+      ul.navbar-nav
+        // Categories
+        li.nav-item
+          a.nav-link(href='#') Common Groceries
+          ul.dropdown-menu
+            li
+              a.dropdown-item(href='#') Fruits
+            li
+              a.dropdown-item(href='#') Milk
+            li
+              a.dropdown-item(href='#') Bread
+        // Cart
+        li.nav-item
+          a.nav-link(href='cart') Cart
+  // Catalog for Fruits, Milk, and Bread
+  .container.mt-4
+    .row
+      // Fruits
+      .col-md-4
+        h2 Fruits
+        .cart-items
+          .card
+            .card-body
+              h5.card-title Apple
+              p.card-text Fresh and juicy apples.
+              p.card-text $1.99 per pound
+              input(type='hidden' name='item_apple' value='apple')
+              input(type='hidden' name='price_apple' value='2.99')
+              button.bg-success(onclick="saveText('Apple',2.99), alert('You bought Apples')" type='submit') Add to cart
+        .card
+          .card-body
+            h5.card-title Pear
+            p.card-text Fresh and juicy pears.
+            p.card-text $2.99 per pound
+            input(type='hidden' name='item_pear' value='pear')
+            input(type='hidden' name='price_pear' value='3.99')
+            button.bg-success(onclick="saveText('Pear',3.99 , alert('You bought Pears'))" type='submit') Add to cart
+        // Add more fruits here
+      // Milk
+      .col-md-4
+        h2 Milk
+        .card
+          .card-body
+            h5.card-title Whole Milk
+            p.card-text Rich and creamy whole milk.
+            p.card-text $12.99 per gallon
+            input(type='hidden' name='item_milk' value='milk')
+            input(type='hidden' name='price_milk' value='12.98')
+            button.bg-success(onclick="saveText('Milk',12.98), alert('You bought Milk')" type='submit') Add to cart
+        // Add more milk options here
+      // Bread
+      .col-md-4
+        h2 Bread
+        .card
+          .card-body
+            h5.card-title Multigrain Bread
+            p.card-text Healthy and delicious multigrain bread.
+            p.card-text $6.99 per loaf
+            input(type='hidden' name='item_bread' value='bread')
+            input(type='hidden' name='price_bread' value='8.45')
+            button.bg-success(onclick="saveText('Bread',8.45) , alert('You bought bread') " type='submit') Add to cart
+        // Add more bread options here
+ul#cart-items
+  // Cart items will be dynamically added here
+// Inside your HTML file
+// Assume you have an "Add to Cart" button for each item
+script.
+  function saveText(text, price) {
+  // Retrieve the current array from local storage or initialize an empty array if none exists
+  var items = JSON.parse(localStorage.getItem('savedItems')) || [];
+  // Add the new item to the array
+  items.push({ text: text, price: price });
+  // Store the updated array back to local storage
+  localStorage.setItem('savedItems', JSON.stringify(items));
+  }
+  // Initialize the cart from localStorage or an empty array
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  let cart=[];
+  // Function to add an item to the cart
+  function addToCart(name, description, price) {
+  }
+  // Function to remove an item from the cart
+  function removeFromCart(index) {
+  cart.splice(index, 1); // Remove the item at the specified index
+  updateCartDisplay();
+  localStorage.setItem('cartItems', JSON.stringify(cartItems)); // Update localStorage
+  }
+  // Function to update the cart display
+  function updateCartDisplay() {
+  const cartList = document.getElementById('cart-items');
+  cartList.innerHTML = ''; // Clear existing items
+  if (cartItems.length === 0) {
+  // Cart is empty
+  cartList.innerHTML = '<li>No items added yet.</li>';
+  } else {
+  // Display each item in the cart
+  cart.forEach((item, index) => {
+  const listItem = document.createElement('li');
+  listItem.textContent = `${item.name} - $${item.price}`;
+  // Add a "Remove" button for each item
+  const removeButton = document.createElement('button');
+  removeButton.textContent = 'Remove';
+  removeButton.onclick = () => removeFromCart(index); // Call removeFromCart with the item index
+  listItem.appendChild(removeButton);
+  cartList.appendChild(listItem);
+  });
+  }
+  }
+  // Initial update of cart display
+  updateCartDisplay();
+// Add your cart page content here
+// Bootstrap JS (optional)
+script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js')
+script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js')
+script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')

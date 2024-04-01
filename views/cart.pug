@@ -1,0 +1,77 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  title Shop-Stop
+  // Bootstrap CSS
+  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+.container.mt-4
+  h1.text-info Cart
+ul#cart-items
+  // Cart items will be dynamically added here
+p#display
+script.
+  window.onload = function() {
+  var items = JSON.parse(localStorage.getItem('savedItems')) || [];
+  var displayContainer = document.getElementById('display');
+  var totalSales = 0;
+  // Function to update the total sales display
+  function updateTotalSales() {
+  var totalSalesElement = document.getElementById('totalSales');
+  if (totalSalesElement) {
+  totalSalesElement.textContent = 'Total Sales: $' + totalSales.toFixed(2);
+  } else {
+  totalSalesElement = document.createElement('div');
+  totalSalesElement.id = 'totalSales';
+  totalSalesElement.textContent = 'Total Sales: $' + totalSales.toFixed(2);
+  displayContainer.appendChild(totalSalesElement);
+  }
+  }
+  // Function to create the checkout button
+  function createCheckoutButton() {
+  var checkoutButton = document.createElement('a');
+  checkoutButton.href = 'checkout.pug';
+  checkoutButton.className = 'btn btn-success';
+  checkoutButton.textContent = 'Checkout';
+  checkoutButton.style.marginTop = '10px';
+  displayContainer.appendChild(checkoutButton);
+  }
+  // Check if there are no items and display a message if true
+  if (items.length === 0) {
+  displayContainer.textContent = 'No items added yet!';
+  } else {
+  // If there are items, display them with a remove button and calculate total sales
+  items.forEach(function(item, index) {
+  var displayElement = document.createElement('div');
+  var textNode = document.createTextNode(item.text + ' - $' + item.price);
+  var removeButton = document.createElement('button');
+  removeButton.textContent = 'Remove';
+  removeButton.onclick = function() {
+  // Remove the item from the array and update local storage
+  items.splice(index, 1);
+  localStorage.setItem('savedItems', JSON.stringify(items));
+  // Remove the display element from the page
+  displayElement.remove();
+  // Update and display the total sales
+  totalSales -= parseFloat(item.price);
+  updateTotalSales();
+  // If no items are left, display the message and remove checkout button
+  if (items.length === 0) {
+  displayContainer.textContent = 'No items added yet!';
+  var checkoutButton = document.querySelector('.btn-success');
+  if (checkoutButton) {
+  checkoutButton.remove();
+  }
+  }
+  };
+  displayElement.appendChild(textNode);
+  displayElement.appendChild(removeButton);
+  displayContainer.appendChild(displayElement);
+  // Add to total sale`1s
+  totalSales += parseFloat(item.price);
+  });
+  // Display the total sales and the checkout button
+  updateTotalSales();
+  createCheckoutButton();
+  }
+  };

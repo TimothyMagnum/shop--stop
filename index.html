@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop-Stop</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="app.js"></script>
+</head>
+<body>
+    <form action="/save" method="post">
+       <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#" style="color: red;">Shop<span style="color: green;">Stop</span></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- Categories -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Common Groceries</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Fruits</a></li>
+                        <li><a class="dropdown-item" href="#">Milk</a></li>
+                        <li><a class="dropdown-item" href="#">Bread</a></li>
+                    </ul>
+                </li>
+                <!-- Cart -->
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Catalog for Fruits, Milk, and Bread -->
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Fruits -->
+            <div class="col-md-4">
+                <h2>Fruits</h2>
+                <div class="cart-items">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Apple</h5>
+                            <p class="card-text">Fresh and juicy apples.</p>
+                            <p class="card-text">$1.99 per pound</p>
+                            <input type="hidden" name="item_apple" value="apple">
+                        <input type="hidden" name="price_apple" value="2.99">
+                            <button class="bg-success" onclick="saveText('Apple',2.99), alert('You bought Apples')" type="submit">Add to cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Pear</h5>
+                        <p class="card-text">Fresh and juicy pears.</p>
+                        <p class="card-text">$2.99 per pound</p>
+                        <input type="hidden" name="item_pear" value="pear">
+                        <input type="hidden" name="price_pear" value="3.99">
+                         <button class="bg-success"  onclick="saveText('Pear',3.99 , alert('You bought Pears'))" type="submit">Add to cart</button>
+                    </div>
+                </div>
+                <!-- Add more fruits here -->
+            </div>
+            <!-- Milk -->
+            <div class="col-md-4">
+                <h2>Milk</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Whole Milk</h5>
+                        <p class="card-text">Rich and creamy whole milk.</p>
+                        <p class="card-text">$12.99 per gallon</p>
+                        <input type="hidden" name="item_milk" value="milk">
+                        <input type="hidden" name="price_milk" value="12.98">
+                         <button class="bg-success"  onclick="saveText('Milk',12.98), alert('You bought Milk')" type="submit">Add to cart</button>
+                    </div>
+                </div>
+                <!-- Add more milk options here -->
+            </div>
+            <!-- Bread -->
+            <div class="col-md-4">
+                <h2>Bread</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Multigrain Bread</h5>
+                        <p class="card-text">Healthy and delicious multigrain bread.</p>
+                        <p class="card-text">$6.99 per loaf</p>
+                        <input type="hidden" name="item_bread" value="bread">
+                        <input type="hidden" name="price_bread" value="8.45">
+                         <button class="bg-success"  onclick="saveText('Bread',8.45) , alert('You bought bread') " type="submit">Add to cart</button>
+                    </div>
+                </div>
+                <!-- Add more bread options here -->
+            </div>
+            
+        </div>
+    </div>
+    </form>
+    
+        
+
+
+
+
+
+        <ul id="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </ul>
+  
+<!-- Inside your HTML file -->
+<!-- Assume you have an "Add to Cart" button for each item -->
+
+<script>
+
+
+function saveText(text, price) {
+  // Retrieve the current array from local storage or initialize an empty array if none exists
+  var items = JSON.parse(localStorage.getItem('savedItems')) || [];
+  // Add the new item to the array
+  items.push({ text: text, price: price });
+  // Store the updated array back to local storage
+  localStorage.setItem('savedItems', JSON.stringify(items));
+}
+
+
+
+    // Initialize the cart from localStorage or an empty array
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    let cart=[];
+    // Function to add an item to the cart
+    function addToCart(name, description, price) {
+        
+    }
+
+    // Function to remove an item from the cart
+    function removeFromCart(index) {
+        cart.splice(index, 1); // Remove the item at the specified index
+        updateCartDisplay();
+        localStorage.setItem('cartItems', JSON.stringify(cartItems)); // Update localStorage
+    }
+
+    // Function to update the cart display
+    function updateCartDisplay() {
+        const cartList = document.getElementById('cart-items');
+        cartList.innerHTML = ''; // Clear existing items
+        
+        if (cartItems.length === 0) {
+            // Cart is empty
+            cartList.innerHTML = '<li>No items added yet.</li>';
+        } else {
+            // Display each item in the cart
+            cart.forEach((item, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${item.name} - $${item.price}`;
+    
+                    // Add a "Remove" button for each item
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = 'Remove';
+                    removeButton.onclick = () => removeFromCart(index); // Call removeFromCart with the item index
+    
+                    listItem.appendChild(removeButton);
+                    cartList.appendChild(listItem);
+                });
+        }
+    }
+
+    // Initial update of cart display
+    updateCartDisplay();
+</script>
+
+    <!-- Add your cart page content here -->
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
